@@ -1,0 +1,56 @@
+﻿@model Pokemon.Models.FavoritesList
+
+@{
+    ViewData["Title"] = "Favorites";
+}
+
+<h1>Favorites</h1>
+
+<div class="row" style="padding: 20px">
+    @foreach (FavoritesListItem item in Model.Items)
+    {
+            <div class="col-12 col-md-3">
+                <div class="card pokemon-card" style="margin-bottom: 20px;">
+                    <img class="card-img-top" src="@item.ImageUrl" alt="@item.Name" />
+                    <div class="favorite-icon">
+                        <i class="material-icons favorite" data-id="@item.Id">favorite</i>  
+                        <span class="favorite-message"></span>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title pokemon-card-title"><a asp-controller="Pokemon" asp-action="Details" asp-route-id="@item.Id">@item.Name</a></h5>
+                        <p style="text-align: center;">Type: @item.Type</p>
+                    </div>
+                </div>
+            </div>
+    }
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function() {
+
+        });
+
+        $('.pokemon-card .favorite-icon i').on('click', function(e) {
+            var icon = $(this);
+            var url = "/Pokemon/RemoveFromFavorites";
+
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: { id : icon.attr("data-id") },
+                dataType: "JSON",
+                success: function(result) {
+                    if (result.success) {
+                        window.location.reload();
+                    }
+                    else
+                    {
+                        alert(result.message);
+                    }
+                }
+            });
+
+        });
+    </script>
+}

@@ -1,0 +1,23 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="row text-center">
+    <div class="col-12">
+        <h1 class="display-4">Welcome!</h1>
+    </div>
+    <div class="col-12">
+        @if (User.Identity.IsAuthenticated)
+        {
+            <p>Now that you're logged in, you can <a asp-controller="Favorites" asp-action="Index">manage your favorites</a> as well as <a asp-controller="Pokemon" asp-action="Index">view our list of Pokemon</a>.</p>
+        }
+        else
+        {
+            <p>Please <a asp-area="Identity" asp-page="/Account/Login">login</a> to manage your favorites, or <a asp-controller="Pokemon" asp-action="Index">view our list of Pokemon</a>.</p>
+            <p>Don't have an account? <a asp-area="Identity" asp-page="/Account/Register">Register Here!</a></p>
+        }
+    </div>
+    <div class="col-12">
+        <img src="~/img/pikachu-home.jpg" style="width: 100%" />
+    </div>
+</div>

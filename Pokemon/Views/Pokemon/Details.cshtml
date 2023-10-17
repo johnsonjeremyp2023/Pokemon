@@ -1,0 +1,81 @@
+﻿@model Pokemon.Models.PokemonDetails
+
+@{
+    ViewData["Title"] = Model.Name;
+}
+
+<div class="row">
+    <div class="col-12" style="text-align: center; position: relative">
+        <h1>
+            @Model.Name 
+            @if (Model.ShowFavorite)
+            {
+                <div class="favorite-icon">
+                    <i class="material-icons @(Model.IsFavorite ? "favorite" : "")" data-id="@Model.Id">@(Model.IsFavorite ? "favorite" : "favorite_border")</i>  
+                    <span class="favorite-message"></span>
+                </div>
+            }
+        </h1>
+        <div>
+            <img src="@Model.ImageUrl" />
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12 col-md-6" style="text-align: center;">
+        <h5>Characteristics</h5>
+        <div>Species: @Model.Species</div>
+        <div>Types: @Model.Type</div>
+        <div>Forms: @Model.Forms</div>
+        <div>Abilities: @Model.Abilities</div>
+    </div>
+    <div class="col-12 col-md-6" style="text-align: center;">
+        <h5>Stats</h5>
+        @foreach (Stat stat in Model.Stats)
+        {
+            <div>@(stat.Name + ": " + stat.Value)</div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function() {
+
+        });
+
+        $('.favorite-icon i').on('click', function(e) {
+            var icon = $(this);
+            var url = "/Pokemon/AddToFavorites";
+            var isFavorite = icon.hasClass("favorite"); 
+            if (isFavorite) {
+                url = "/Pokemon/RemoveFromFavorites";
+            }
+
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: { id : icon.attr("data-id") },
+                dataType: "JSON",
+                success: function(result) {
+                    if (result.success) {
+                        if (isFavorite) {
+                            icon.removeClass("favorite");
+                            icon.html("favorite_border");
+                        } else {
+                            icon.addClass("favorite");
+                            icon.html("favorite");
+                        }
+                        icon.parent().find(".favorite-message").html(result.message);
+                    }
+                    else
+                    {
+                        alert(result.message);
+                    }
+                }
+            });
+
+        });
+    </script>
+}

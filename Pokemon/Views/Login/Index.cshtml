@@ -1,0 +1,39 @@
+﻿@*@model Pokemon.Models.LoginModel
+
+@{
+    ViewData["Title"] = "Login";
+}
+
+<div class="container border" style="padding: 20px">
+    <form method="post">
+        <div class="text-danger" asp-validation-summary="ModelOnly"></div>
+        <div class="form-group row">
+            <div class="col-2">
+                <label asp-for="Username">User Name</label>
+            </div>
+            <div class="col-5">
+                <input type="text" class="form-control" asp-for="Username" />
+            </div>
+            <span class="text-danger" asp-validation-for="Username"></span>
+        </div>
+        <div class="form-group row">
+            <div class="col-2">
+                <label asp-for="Password">Password</label>
+            </div>
+            <div class="col-5">
+                <input type="text" class="form-control" asp-for="Password" />
+            </div>
+            <span class="text-danger" asp-validation-for="Password"></span>
+        </div>
+        <div class="form-group row">
+            <div class="col-2">
+                <input type="submit" class="btn btn-primary" value="Login" />
+            </div>
+            <div class="col-5">
+                <a asp-controller="LoginController" asp-action="ForgotPassword">Forgot Password</a> 
+                <a asp-controller="LoginController" asp-action="Create">Create Account</a>
+            </div>
+        </div>
+    </form>
+</div>
+*@

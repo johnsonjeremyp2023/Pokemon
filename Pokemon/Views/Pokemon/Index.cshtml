@@ -1,0 +1,118 @@
+﻿@model Pokemon.Models.PokemonList
+
+@{
+    ViewData["Title"] = "Pokemon";
+}
+
+<h1>Pokemon List</h1>
+
+<div class="row" style="padding: 20px">
+    @foreach (PokemonListItem item in Model.Items)
+    {
+        <div class="col-12 col-md-3">
+            <div class="card pokemon-card" style="margin-bottom: 20px;">
+                <img class="card-img-top" src="@item.ImageUrl" alt="@item.Name" />
+                @if (Model.ShowFavorites)
+                {
+                    <div class="favorite-icon">
+                        <i class="material-icons @(item.IsFavorite ? "favorite" : "")" data-id="@item.Id">@(item.IsFavorite ? "favorite" : "favorite_border")</i>  
+                        <span class="favorite-message"></span>
+                    </div>
+                }
+                <div class="card-body">
+                    <h5 class="card-title pokemon-card-title"><a asp-controller="Pokemon" asp-action="Details" asp-route-id="@item.Id">@item.Name</a></h5>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+<table class="pagination-table">
+    <tr>
+        <td><a asp-controller="Pokemon" asp-action="Index" asp-route-limit="@Model.Limit" asp-route-page="1">&lt;&lt;</a></td>
+        <td><a asp-controller="Pokemon" asp-action="Index" asp-route-limit="@Model.Limit" asp-route-page="@(Model.Page > 1 ? Model.Page - 1 : 1)">&lt;</a></td>
+        @if (Model.TotalPages > 10)
+        {
+            @for (int i = 1; i <= 4; i++)
+            {
+                if (i == Model.Page)
+                {
+                    <td>@i</td>
+                }
+                else
+                {
+                    <td><a asp-controller="Pokemon" asp-action="Index" asp-route-limit="@Model.Limit" asp-route-page="@i">@i</a></td>
+                }
+            } 
+            <td style="border: none; text-decoration: none">...</td>
+            @for (int i = Model.TotalPages - 4; i <= Model.TotalPages; i++)
+            {
+                if (i == Model.Page)
+                {
+                    <td>@i</td>
+                }
+                else
+                {
+                    <td><a asp-controller="Pokemon" asp-action="Index" asp-route-limit="@Model.Limit" asp-route-page="@i">@i</a></td>
+                }
+            } 
+        }
+        else
+        {
+            @for (int i = 1; i <= Model.TotalPages; i++)
+            {
+                if (i == Model.Page)
+                {
+                    <td>@i</td>
+                }
+                else
+                {
+                    <td><a asp-controller="Pokemon" asp-action="Index" asp-route-limit="@Model.Limit" asp-route-page="@i">@i</a></td>
+                }
+            }    
+        }
+        
+        <td><a asp-controller="Pokemon" asp-action="Index" asp-route-limit="@Model.Limit" asp-route-page="@(Model.Page < Model.TotalPages ? Model.Page + 1 : Model.TotalPages)">&gt;</a></td>
+        <td><a asp-controller="Pokemon" asp-action="Index" asp-route-limit="@Model.Limit" asp-route-page="@Model.TotalPages">&gt;&gt;</a></td>
+    </tr>
+</table>
+
+@section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function() {
+            
+        });
+
+        $('.pokemon-card .favorite-icon i').on('click', function(e) {
+            var icon = $(this);
+            var url = "/Pokemon/AddToFavorites";
+            var isFavorite = icon.hasClass("favorite"); 
+            if (isFavorite) {
+                url = "/Pokemon/RemoveFromFavorites";
+            }
+            
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: { id : icon.attr("data-id") },
+                dataType: "JSON",
+                success: function(result) {
+                    if (result.success) {
+                        if (isFavorite) {
+                            icon.removeClass("favorite");
+                            icon.html("favorite_border");
+                        } else {
+                            icon.addClass("favorite");
+                            icon.html("favorite");
+                        }
+                        icon.parent().find(".favorite-message").html(result.message);
+                    }
+                    else
+                    {
+                        alert(result.message);
+                    }
+                }
+            });
+            
+        });
+    </script>
+}

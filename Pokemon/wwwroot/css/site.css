@@ -1,0 +1,61 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+.form-floating {
+    margin-bottom: 10px;
+}
+
+.pagination-table td {
+    border: 1px solid black;
+    padding: 10px;
+    font-size: 20px;
+    text-decoration: underline;
+}
+
+.pokemon-card-title {
+    text-align: center;
+    font-size: 24px;
+}
+
+.favorite-icon {
+    color: red;
+}
+
+.favorite-icon i:hover {
+    cursor: pointer;
+    color: #ff2222;
+}
+
+.pokemon-card {
+    position: relative;
+}
+
+.pokemon-card .favorite-icon {
+    position: absolute;
+    left: 5px;
+    top: 5px;
+}
+
+.favorite-icon .favorite-message {
+    position: relative;
+    top: -6px;
+    color: forestgreen;
+    font-size: 16px;
+    font-weight: normal;
+}
